@@ -58,7 +58,7 @@ class DB(core.CORE):
 				sql = "select count(*) from %s where url = '%s'" % (tables,url);
 				if DB().query(sql) == 0:#入库之前 先判断数据库是否含有相同信息 如果没有就入裤
 					
-					sql = "insert into %s values(null,\"%s\",\"%s\",'null',0,0,0)" % (tables,url,ip);
+					sql = "insert into %s values(null,\"%s\",\"%s\",0,0,0,0)" % (tables,url,ip);
 					DB().increase(sql);
 		except :
 			#print'\033[1;31;40m'+"Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
