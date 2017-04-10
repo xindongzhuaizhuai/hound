@@ -1,5 +1,5 @@
 #-*-coding:utf-8 -*-
-import time,threading,sys,core,dns.resolver,os;
+import time,threading,sys,core,dns.resolver,os,re;
 from  mysql.DB import DB;
 from table.tabulate import tabulate
 from table.picture import *
@@ -89,8 +89,40 @@ def Loop_acquisition_IP():
 		if ip != False and  not core.Blacklist_ip.count(ip):
 			core.Blacklist_ip.append(ip);
 
+def ydns(domain):
+	try:
+		res = os.popen('nslookup -type=ns ' + domain).read()
+		nameserver = re.findall(r'nameserver = ([\w\.]+)',res)
+		for server in nameserver:
+		    #print server+">>>>>>>>>>>>>>>>>>>>>>>>>>>";
+		    if len(server) < 5:
+		        server += domain
+		    res = os.popen('dig axfr @%s %s' % (server,domain)).read()
+		    yuming =  re.findall(r"([A-Za-z0-9\_\-\.]+)\s+\d+\s+IN",res);
+		    replace_reg = re.compile(r'\.$');
+
+		    if yuming:
+				for i,ym  in enumerate(yuming):
+					replace_reg = re.compile(r'\.$')
+					ym = replace_reg.sub('', ym)
+					yuming[i] = ym;
+				return  yuming;
+	except Exception,e:
+		yuming = False;
+		return  yuming;
 
 
-
-
+def ip(url):
+	my_resolver=dns.resolver.Resolver();
+	my_resolver.nameservers=core.default_dns
+	# 需要查询的域名
+	try:
+		ip=my_resolver.query(url,'A')[0];
+	except Exception,e:
+		ip = False;
+	
+	if ip != False and  not core.Blacklist_ip.count(ip):
+		return ip;
+	else:
+		return '0.0.0.0';
 
