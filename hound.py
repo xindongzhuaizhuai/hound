@@ -74,7 +74,7 @@ if __name__ == '__main__':
 			function.a4();
 		lis = hound_db.query_all("select lis from lis"); #获取所有字典数据
 		
-		print "\033[1;35;1m  Dictionary--> %i Tools--> hound version--> 1.5 \033[0m  \n" % (len(lis));
+		print "\033[1;35;1m  Dictionary--> %i Tools--> hound version--> 1.6 \033[0m  \n" % (len(lis));
 
 		url = url.replace('http://','').replace('https://',''); #处理域名
 		url_tables = url.replace('.','_').replace('-','_');
@@ -88,12 +88,8 @@ if __name__ == '__main__':
 				ip varchar(40)	not null comment 'ip',
 				recursion int not null comment 'digui',
 				Crawler int not null comment 'pachong',
-				owasp int not null comment 'owasp top 10',
-				result text not null comment 'loudongjieguo',
-				port text null comment 'port',
-				information text null comment 'information',
-				mailbox int null comment 'youxiang',
-				cms text null comment 'shibiecms'
+				cms text null comment 'shibiecms',
+				dns int not null comment 'yuchuansong'
 				)charset utf8 engine = innodb;
 			""" % (url_tables) );
 		try:
@@ -104,8 +100,28 @@ if __name__ == '__main__':
 		except Exception,e:
 			url_ip = "0.0.0.0";
 		hound_db.Domain_storage(url_tables,url,url_ip); #入库
-		sql = "select count(*) from %s where recursion != 0 and url = '%s' " % (url_tables,url);
+
 		
+		sql = "select count(*) from %s where dns != 0  and url = '%s' " % (url_tables,url);
+		if hound_db.query(sql) == 0 :
+			print 'Current domain: '+url+"Detecting vulnerabilities!";
+			ydns = function.ydns(url); #检测域传输
+			if ydns:
+				sql2 = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,url);
+				hound_db.increase(sql2);
+				time.sleep(0.3)
+				for yuming in ydns:
+					y_ip = function.ip(yuming);
+					hound_db.Domain_storage(url_tables,yuming,y_ip)
+
+			else:
+				sql = "update %s set dns = 1 where url = '%s'" % (url_tables,url);
+				hound_db.increase(sql);
+			time.sleep(0.3)
+
+
+
+		sql = "select count(*) from %s where recursion != 0  and url = '%s' " % (url_tables,url);
 		if hound_db.query(sql) == 0 :
 			blast.blast_url(url,thread,lis,url_tables); #爆破域名 并且等待结束
 			sql = "update %s set recursion = 1 where url = '%s'" % (url_tables,url);
@@ -188,10 +204,33 @@ if __name__ == '__main__':
 	  			'''接口调用完毕！'''
 	  			time.sleep(2);   		
 	  	
-	  	function.table_print(url_tables); #输出表格
+
+		while True: #递归检测域传送
+			
+			sql = "select url from %s where dns = 0 limit 1" % (url_tables);
+			dns_url = hound_db.query_all(sql);
+			if len(dns_url) > 0 :
+
+				this_dns_yuming = dns_url[0][0];
+				print 'Current domain: '+this_dns_yuming+"----->Detecting vulnerabilities!";
+				ydns = function.ydns(this_dns_yuming); #检测域传输
+				if ydns:
+					sql = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+					hound_db.increase(sql);
+					for yuming in ydns:
+						y_ip = function.ip(yuming);
+						hound_db.Domain_storage(url_tables,yuming,y_ip)
+				else:
+					sql = "update %s set dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+					hound_db.increase(sql);
+				time.sleep(0.3)
+			else:
+				break;
+
+
+	  	
 
 	  	if recursion != None: #递归爆破
-	  		time.sleep(3); 
 			print ' Ready to burst, the need for a certain time! '
 			while True:
 				sql = "select url from %s where recursion = 0 limit 1" % (url_tables);
@@ -204,7 +243,7 @@ if __name__ == '__main__':
 			
 				time.sleep(1);
 			print 'OK!'
-			function.table_print(url_tables); #输出表格
+			
 
 
 		if h_crawler != None:#爬虫
@@ -226,7 +265,31 @@ if __name__ == '__main__':
 				for tt in crawler_progress:
   					tt.join()
   					time.sleep(1); 
-  			function.table_print(url_tables); #输出表格
+  		
+
+		while True: #递归检测域传送
+			
+			sql = "select url from %s where dns = 0 limit 1" % (url_tables);
+			dns_url = hound_db.query_all(sql);
+			if len(dns_url) > 0 :
+
+				this_dns_yuming = dns_url[0][0];
+				print 'Current domain: '+this_dns_yuming+"----->Detecting vulnerabilities!";
+				ydns = function.ydns(this_dns_yuming); #检测域传输
+				if ydns:
+					sql = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+					hound_db.increase(sql);
+					for yuming in ydns:
+						y_ip = function.ip(yuming);
+						hound_db.Domain_storage(url_tables,yuming,y_ip)
+				else:
+					sql = "update %s set dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+					hound_db.increase(sql);
+				time.sleep(0.3)
+			else:
+				break;
+				
+  		function.table_print(url_tables); #输出表格
 
   		hound_db.increase("update %s set recursion = 2 where url = '%s'" % (url_tables,url));
 
