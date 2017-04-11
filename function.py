@@ -46,7 +46,7 @@ def im_url(file_url,tables):
 				if ip != False:
 					sql = "select count(id) from %s where url = '%s' " % (tables,url);
 					if not im_url_db.query(sql):
-						sql = "insert into %s values (null,'%s','%s','0',0,0,'null','null','null',0)" % (tables,url,str(ip));
+						sql = "insert into %s values (null,\"%s\",\"%s\",0,0,0,0)" % (tables,url,str(ip));
 						im_url_db.increase(sql);
 						print url,"===>OK",ip;
 
