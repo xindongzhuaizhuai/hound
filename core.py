@@ -42,5 +42,5 @@ class CORE():
 		   		
 		   		
 		except Exception,e:
-		    print'\033[1;31;1m'+"Mysql Error: %s" % (e) + '\033[0m';
+		    print '\033[1;31;1m'+"Mysql Error: %s" % (e) + '\033[0m';
 		    exit();
