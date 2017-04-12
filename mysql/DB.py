@@ -10,7 +10,7 @@ class DB(core.CORE):
 			self.mysql.execute(sql); #操作数据
 			self.db.commit();#提交数据
 		except Exception,e:
-		    print'\033[1;31;1m'+"function: increase --> Mysql Error: %s" % (e) + '\033[0m';
+		    print '\033[1;31;1m'+"function: increase --> Mysql Error: %s" % (e) + '\033[0m';
 		    exit();
 
 	def query(self,sql): #查询一条
@@ -20,7 +20,7 @@ class DB(core.CORE):
 		
 			return q_db[0]
 		except Exception,e:
-			print'\033[1;31;1m'+"function: query --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
+			print '\033[1;31;1m'+"function: query --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
 			exit();
 
 
@@ -51,7 +51,7 @@ class DB(core.CORE):
 				time.sleep(0.01);
 			f.close() #关闭
 		except Exception,e:
-			print'\033[1;31;1m'+"function: Dictionaries --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
+			print '\033[1;31;1m'+"function: Dictionaries --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
 			exit();
 
 	def  Domain_storage(self,tables,url,ip): #域名入库
@@ -72,7 +72,7 @@ class DB(core.CORE):
 					self.db.commit();#提交数据
 
 		except Exception,e:
-			print'\033[1;31;40m'+"function: Domain_storage --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
+			print '\033[1;31;40m'+"function: Domain_storage --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
 			return False;
 
 
@@ -84,7 +84,7 @@ class DB(core.CORE):
 			self.db.commit();#提交数据
 			return list_all
 		except Exception,e:
-			print'\033[1;31;1m'+"function: query_all --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
+			print '\033[1;31;1m'+"function: query_all --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
 			exit();
 
 
@@ -98,42 +98,7 @@ class DB(core.CORE):
 			self.mysql.execute(sql); #操作数据
 			self.db.commit();#提交数据
 		except Exception,e:
-			print'\033[1;31;1m'+"function: p_increase --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
-
-
-
-
-					sql = "insert into %s values(null,\"%s\",\"%s\",0,0,0,0)" % (tables,url,ip);
-					DB().increase(sql);
-		except :
-			#print'\033[1;31;40m'+"Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
-			return False;
-
-
-
-	def query_all(self,sql): #查询所有
-		try:
-			list_all = self.mysql.execute(sql); #执行sql
-			list_all = self.mysql.fetchmany(list_all); #查询所有
-			self.db.commit();#提交数据
-			return list_all
-		except Exception,e:
-			print'\033[1;31;1m'+"Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
-			exit();
-
-
-
-
-
-######################爬虫#########################################
-
-	def p_increase(self,sql): #增 删 改 数据方法
-		try:
-			self.mysql.execute(sql); #操作数据
-			self.db.commit();#提交数据
-		except Exception,e:
-			print '';
-
+			print '\033[1;31;1m'+"function: p_increase --> Exception: %s  Error: %s " % (Exception,e) +'\033[0m';
 
 
 
