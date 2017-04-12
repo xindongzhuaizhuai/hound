@@ -1,10 +1,11 @@
 # -*- coding=utf-8 -*-
-import requests,re,sys,time,threading,socket;
+import requests,re,sys,time,threading,Queue;
 import dns.resolver
 sys.path.append("..")
 from mysql.DB import DB;
 import core;
 db_plus = DB();
+q = Queue.Queue(1);
 class simple(object):
 	walk = 0;
 	walk2 = 0;
@@ -57,7 +58,6 @@ class simple(object):
 ##########################循环判断域名是否存在   如果存在就入库#####################
 						#		url，字典
 	def h_get_blast_text(self,url,lis,tables): #循环判断域名是否存在   如果存在就入库
-
 		this = simple();
 		for x in range(len(lis)):
 			simple.walk = simple.walk +1;
@@ -76,9 +76,7 @@ class simple(object):
 		this = simple();
 		
 		for x in range(len(lis)):
-
 			h_url = lis[x][0]+"."+url;
-
 			this.is_url(h_url,tables);
 
 			
@@ -101,5 +99,10 @@ class simple(object):
 			ip = False;
 			
 		if ip and not core.Blacklist_ip.count(ip): #如果域名存在的话 and IP不是黑名单的话
+			while not q.empty():
+				time.sleep(0.1);
+
+			q.put(url)
 			tables = tables.replace('.','_');
 			db_plus.Domain_storage(tables,url,ip); #入裤
+			q.get()
