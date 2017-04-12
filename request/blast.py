@@ -78,7 +78,7 @@ class blast(simple):
 		self.simple = simple();
 		now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		for recursion_url in url_list:
-			print " URL:"+recursion_url[0]+"-->\033[1;32;1m  Send out all the requests  Current time:  %s \r \033[0m" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+			print " URL:"+recursion_url[0]+"-->\033[1;32;1m  Send out all the requests  Current time:  %s \r \033[0m" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 			while True:
 				list2 = lis[kaishi:jiewei]; #获取成员份量
 				
@@ -99,5 +99,5 @@ class blast(simple):
 		   	tt.join(); #等待所有线程结束
 		sql = "update %s set recursion = 1 where url = '%s'" % (tables,recursion_url[0]);
 		DB().increase(sql);
-		print "\033[1;32;1m  <--Above the domain name to send complete 0o(^_^)o0  Current time: %s \033[0m  \r\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+		print "\033[1;32;1m  <--Above the domain name to send complete 0o(^_^)o0  Current time: %s \033[0m  \r\n" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
