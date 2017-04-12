@@ -105,7 +105,7 @@ if __name__ == '__main__':
 		
 		sql = "select count(*) from %s where dns != 0  and url = '%s' " % (url_tables,url);
 		if hound_db.query(sql) == 0 :
-			print 'Current domain: '+url+"-->Detecting vulnerabilities!";
+			print '  Current domain: '+url+"-->Detecting vulnerabilities!";
 			ydns = function.ydns(url); #检测域传输
 			if ydns:
 				sql2 = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,url);
