@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
-import argparse,threading,time,function,random,dns.resolver
+import argparse,threading,time,function,random,dns.resolver,core
 from table.tabulate import tabulate
 from request.blast import blast; 
 from  mysql.DB import DB;
-import core
+from request.call_interface import call_interface;
+from request.simple import simple;
 from crawler.crawler import crawler
 parser = argparse.ArgumentParser()
 parser.add_argument("-l",help=" -l  Update your dictionary "); #导入字典
@@ -74,7 +75,7 @@ if __name__ == '__main__':
 			function.a4();
 		lis = hound_db.query_all("select lis from lis"); #获取所有字典数据
 		
-		print "\033[1;35;1m  Dictionary--> %i Tools--> hound version--> 1.6 \033[0m  \n" % (len(lis));
+		print "\033[1;35;1m  Dictionary--> %i Tools--> hound version--> 1.7 \033[0m  \n" % (len(lis));
 
 		url = url.replace('http://','').replace('https://',''); #处理域名
 		url_tables = url.replace('.','_').replace('-','_');
@@ -104,7 +105,7 @@ if __name__ == '__main__':
 		
 		sql = "select count(*) from %s where dns != 0  and url = '%s' " % (url_tables,url);
 		if hound_db.query(sql) == 0 :
-			print 'Current domain: '+url+"Detecting vulnerabilities!";
+			print 'Current domain: '+url+"-->Detecting vulnerabilities!";
 			ydns = function.ydns(url); #检测域传输
 			if ydns:
 				sql2 = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,url);
@@ -132,12 +133,9 @@ if __name__ == '__main__':
 			time.sleep(0.3); 
 		if Interface == 'good': #如果调用接口
 			'''调用接口查询'''
-			from request.call_interface import call_interface;
 			i_lis = call_interface.jiekou1(url); #获取接口输出的域名
 			
 			if len(i_lis) > 1:#如果获取到的域名超过一个的话
-				
-				from request.simple import simple;
 				is_url = simple(); #new 对象
 				print '\033[1;32;1m  Call interface to get the domain name...√  \033[0m';
 				time.sleep(1);
