@@ -41,4 +41,5 @@ apt-get install MySQL-server
 
 mysql-> source 目录/db.sql
 
+ Detailed introduction :http://www.freebuf.com/sectool/131640.html
 
