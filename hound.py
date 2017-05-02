@@ -9,7 +9,7 @@ from crawler.crawler import crawler
 parser = argparse.ArgumentParser()
 parser.add_argument("-l",help=" -l  Update your dictionary "); #导入字典
 
-parser.add_argument("-imurl" , help=" -imurl  Crawler thread", nargs="+"); #倒入域名 第一个参数是路径 第二个参数是表
+parser.add_argument("-imurl" , help=" -imurl   Domain dictionary   Table name  ", nargs="+"); #倒入域名 第一个参数是路径 第二个参数是表
 
 parser.add_argument("-u",help=" -u  the website you want to request "); # 网站
 
