@@ -108,16 +108,15 @@ if __name__ == '__main__':
 			print '  Current domain: '+url+"-->Detecting vulnerabilities!";
 			ydns = function.ydns(url); #检测域传输
 			if ydns:
-				sql2 = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,url);
-				hound_db.increase(sql2);
-				time.sleep(0.3)
-				for yuming in ydns:
-					y_ip = function.ip(yuming);
-					hound_db.Domain_storage(url_tables,yuming,y_ip)
-
-			else:
-				sql = "update %s set dns = 1 where url = '%s'" % (url_tables,url);
-				hound_db.increase(sql);
+				if len(ydns) != 1 and ydns[0] != url:
+					sql2 = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,url);
+					hound_db.increase(sql2);
+					time.sleep(0.3)
+					for yuming in ydns:
+						y_ip = function.ip(yuming);
+						hound_db.Domain_storage(url_tables,yuming,y_ip)
+			sql = "update %s set dns = 1 where url = '%s'" % (url_tables,url);
+			hound_db.increase(sql);
 			time.sleep(0.3)
 
 
@@ -213,14 +212,14 @@ if __name__ == '__main__':
 				print 'Current domain: '+this_dns_yuming+"----->Detecting vulnerabilities!";
 				ydns = function.ydns(this_dns_yuming); #检测域传输
 				if ydns:
-					sql = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
-					hound_db.increase(sql);
-					for yuming in ydns:
-						y_ip = function.ip(yuming);
-						hound_db.Domain_storage(url_tables,yuming,y_ip)
-				else:
-					sql = "update %s set dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
-					hound_db.increase(sql);
+					if len(ydns) != 1 and ydns[0] != url:
+						sql = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+						hound_db.increase(sql);
+						for yuming in ydns:
+							y_ip = function.ip(yuming);
+							hound_db.Domain_storage(url_tables,yuming,y_ip)
+				sql = "update %s set dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+				hound_db.increase(sql);
 				time.sleep(0.3)
 			else:
 				break;
@@ -275,14 +274,14 @@ if __name__ == '__main__':
 				print 'Current domain: '+this_dns_yuming+"----->Detecting vulnerabilities!";
 				ydns = function.ydns(this_dns_yuming); #检测域传输
 				if ydns:
-					sql = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
-					hound_db.increase(sql);
-					for yuming in ydns:
-						y_ip = function.ip(yuming);
-						hound_db.Domain_storage(url_tables,yuming,y_ip)
-				else:
-					sql = "update %s set dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
-					hound_db.increase(sql);
+					if len(ydns) != 1 and ydns[0] != url:
+						sql = "update %s set recursion = 1 , dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+						hound_db.increase(sql);
+						for yuming in ydns:
+							y_ip = function.ip(yuming);
+							hound_db.Domain_storage(url_tables,yuming,y_ip)
+				sql = "update %s set dns = 1 where url = '%s'" % (url_tables,this_dns_yuming);
+				hound_db.increase(sql);
 				time.sleep(0.3)
 			else:
 				break;
@@ -290,5 +289,4 @@ if __name__ == '__main__':
   		function.table_print(url_tables); #输出表格
 
   		hound_db.increase("update %s set recursion = 2 where url = '%s'" % (url_tables,url));
-
 
